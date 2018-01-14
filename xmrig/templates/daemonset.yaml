@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: {{ template "xmrig.fullname" . }}
+  labels:
+    app: {{ template "xmrig.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  template:
+    metadata:
+      labels:
+        app: {{ template "xmrig.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      priorityClassName: low-priority
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["./xmrig"]
+          args: ["-o", "{{ .Values.xmrig.pool }}", "-u", "{{ .Values.xmrig.address }}", "-p", "{{ .Values.xmrig.password }}", "{{ .Values.xmrig.args }}"]
+          resources:
+{{ toYaml .Values.resources | indent 12 }}

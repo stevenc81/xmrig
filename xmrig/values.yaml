@@ -1,0 +1,42 @@
+# Default values for xmrig.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+image:
+  repository: stevenc81/xmrig
+  tag: NoDevFee
+  pullPolicy: IfNotPresent
+service:
+  name: nginx
+  type: ClusterIP
+  externalPort: 80
+  internalPort: 80
+ingress:
+  enabled: false
+  # Used to create an Ingress record.
+  hosts:
+    - chart-example.local
+  annotations:
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  tls:
+    # Secrets must be manually created in the namespace.
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+xmrig:
+  pool: "pool.supportxmr.com:5555"
+  address: "443RH5EPfhEPJJ6utQ6cdB5r7jM6hyZYAaY2sVhmwPKnQv2gQKB6bwxJrxqKfcoJ1XNKHHqsE4GYyC51zDTZnWgLFKY9sWo"
+  password: "xmrig-m5large:stevenc81@gmail.com"
+  args: "-k"

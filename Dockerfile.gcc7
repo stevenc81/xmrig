@@ -1,0 +1,23 @@
+FROM debian:sid
+RUN adduser --disabled-password --system --home /xmrig miner
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      build-essential \
+      cmake \
+      git \
+      ca-certificates \
+      libuv1-dev && \
+    rm -rf /var/lib/apt/lists/* && \
+    git clone https://github.com/stevenc81/xmrig && \
+    cd xmrig && \
+    mkdir build && \
+    cmake -DCMAKE_BUILD_TYPE=Release -DWITH_HTTPD=OFF . && \
+    make && \
+    apt-get -y remove \
+      build-essential \
+      cmake \
+      git && \
+    apt-get -y autoremove
+USER miner
+WORKDIR /xmrig
+ENTRYPOINT  ["./xmrig"]
